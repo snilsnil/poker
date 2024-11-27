@@ -1,0 +1,14 @@
+{
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Spring Boot-PokerApplication<springBoot>",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "mainClass": "com.solo.poker.PokerApplication",
+      "projectName": "springBoot",
+      "args": "",
+      "envFile": "${workspaceFolder}/.env"
+    }
+  ]
+}
