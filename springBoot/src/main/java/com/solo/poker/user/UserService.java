@@ -15,12 +15,26 @@ public class UserService {
 
     public String createUser(User user) {
         try {
+            boolean checkUserId=userRepository.existsByUserId(user.getUserId());
+            boolean checkEmail=userRepository.existsByEmail(user.getEmail());
+            if (checkEmail==true 
+            && checkUserId==true)
+                throw new UserAlreadyExistsException("Exist userId and email");
+            else if (checkUserId==true)
+                throw new UserAlreadyExistsException("Exist userId");
+            else if (checkEmail==true)
+            throw new UserAlreadyExistsException("Exist email");    
+
             // 비밀번호 암호화 및 사용자 저장
             user.setPassword(passwordEncoder.encode(user.getPassword()));
             this.userRepository.save(user);
 
-            return "User created successfully";
+            return "success";
 
+        } catch (UserAlreadyExistsException e) {
+            // 사용자 이미 존재하는 경우 예외 던짐
+            throw e;
+            
         } catch (IllegalArgumentException e) {
             // 입력 데이터가 잘못된 경우
             return "Error: " + e.getMessage();
@@ -29,7 +43,8 @@ public class UserService {
             // 데이터베이스 관련 오류
             return "Database error: " + e.getMessage();
 
-        } catch (Exception e) {
+        } 
+        catch (Exception e) {
             // 기타 예상치 못한 오류
             return "Unexpected error: " + e.getMessage();
         }
