@@ -28,12 +28,9 @@
             special: /[~!@#$%^&*()_+|<>?:{}`]/.test(password1),
             length: password1.length
         };
-        if(checks.lowerCase
+        return checks.lowerCase
         && checks.number && checks.special && 
-        7 < checks.length && checks.length < 15)
-            return true;
-        else 
-            return false;
+        7 < checks.length && checks.length < 15
     };
 
     /**
@@ -42,7 +39,7 @@
     async function submitButton(event) {
         event.preventDefault();
 
-        if (CheckPassword()&&userId !== '' && username !== '' && email !== '') {
+        if (CheckPassword() && password1 === password2 && userId !== '' && username !== '' && email !== '') {
                 await createUser();
         } else if (!CheckPassword() || password1 !== password2){
             messege = '비밀번호 조건이 맞지 않습니다.'
