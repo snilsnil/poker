@@ -14,9 +14,18 @@ public class UserController {
 
     @PostMapping("/signup")
     public String signup(@RequestBody User user) {
-        // user 객체에는 클라이언트에서 보낸 데이터가 자동으로 매핑됩니다.
+        // 회원가입 정보를 받아서 DB에 저장하기
         String result = userService.createUser(user);
 
         return result;
     }
+
+    @PostMapping("/signin")
+    public String login(@RequestBody LogInUser logInUser) {
+        // ID와 비밀번호를 받아서 사용자가 있는지 확인하기
+        String result = userService.login(logInUser);
+
+        return result;
+    }
+
 }

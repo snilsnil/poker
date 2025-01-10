@@ -9,6 +9,10 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 
 @Configuration
@@ -36,5 +40,12 @@ public class Config implements WebMvcConfigurer {
                 .allowedMethods("GET", "POST", "PUT", "DELETE") // 허용할 HTTP 메소드
                 .allowedHeaders("*") // 모든 헤더 허용
                 .allowCredentials(true); // 쿠키 전달 허용 (필요한 경우)
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
+        return mapper;
     }
 }

@@ -5,7 +5,7 @@
     let password2 = '';
     let username = '';
     let email = '';
-    let messege = '';
+    let message = '';
 
     let equalPassword = '';
 
@@ -42,10 +42,10 @@
         if (CheckPassword() && password1 === password2 && userId !== '' && username !== '' && email !== '') {
                 await createUser();
         } else if (!CheckPassword() || password1 !== password2){
-            messege = '비밀번호 조건이 맞지 않습니다.'
+            message = '비밀번호 조건이 맞지 않습니다.'
         } 
         else {
-            messege = '빈칸이 존재합니다.';
+            message = '빈칸이 존재합니다.';
         }
     }
 
@@ -64,7 +64,7 @@
         if(response.data=='success'){
             window.location.href = '/'; // 성공 시 리다이렉트
         } else 
-        messege = response.data;
+        message = response.data;
     }
 
 </script>
@@ -73,8 +73,8 @@
     <fieldset style="width: 450px;">
         <legend>회원가입</legend>
 
-        <span style="color: {messege === ''? 'black' : 'red'}">
-            {messege}
+        <span style="color: {message === ''? 'black' : 'red'}">
+            {message}
         </span>
         <br>
         <br>
