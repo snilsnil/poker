@@ -1,32 +1,52 @@
 package com.solo.poker.jwt;
 
 import io.jsonwebtoken.Jwts;
-import org.springframework.stereotype.Service;
 
-import java.time.LocalTime;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
+
+import java.nio.charset.StandardCharsets;
+import java.util.Date;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 
-import com.solo.poker.user.User;
-
-@Service
+@Component
 public class JWTGenerator {
 
-    private final SecretKey key;
+    private SecretKey secretKey;
 
-    public JWTGenerator() {
+    public JWTGenerator(@Value("${spring.jwt.secret}") String secret) {
 
-        // 비밀키 생성
-        this.key = Jwts.SIG.HS256.key().build();
+        secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8),
+                Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
-    public String generateToken(User user) {
+    public String getUsername(String token) {
+
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("username",
+                String.class);
+    }
+
+    public String getRole(String token) {
+
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().get("role",
+                String.class);
+    }
+
+    public Boolean isExpired(String token) {
+
+        return Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token).getPayload().getExpiration()
+                .before(new Date());
+    }
+
+    public String createJwt(String username, Long expiredMs) {
+
         return Jwts.builder()
-                .subject(user.getUsername())
-                .claim("userId", user.getUserId())
-                .claim("username", user.getUsername())
-                .claim("email", user.getEmail())
-                .claim("time", LocalTime.now().toString())
-                .signWith(key).compact();
+                .claim("username", username)
+                .issuedAt(new Date(System.currentTimeMillis()))
+                .expiration(new Date(System.currentTimeMillis() + expiredMs))
+                .signWith(secretKey)
+                .compact();
     }
 }

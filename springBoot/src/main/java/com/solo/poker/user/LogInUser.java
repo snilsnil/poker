@@ -13,8 +13,8 @@ public class LogInUser {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "userId", unique = true)
-    private String userId; // userId 개별 유니크 제약 조건
+    @Column(name = "username", unique = true)
+    private String username; // username 개별 유니크 제약 조건
 
     private String password;
 }

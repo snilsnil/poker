@@ -6,6 +6,7 @@ import { redirect } from "@sveltejs/kit";
  */
 export const load = async ({ request }) => {
     const cookie = request.headers.get("cookie");
+
     const token = cookie
         ?.split("; ")
         .find((row) => row.startsWith("token="))

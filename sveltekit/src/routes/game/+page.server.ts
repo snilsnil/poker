@@ -1,11 +1,35 @@
 import { redirect } from "@sveltejs/kit";
 
 /**
- * @param {{ cookies: Cookies }} params
+ * @param {{ request: Request }} params
  * @returns {Promise<{ token: string | null }>}
  */
-export const load = async ({ cookies }) => {
-    let token = cookies.get("token");
+export const load = async ({ request }) => {
+    const cookie = request.headers.get("cookie");
+    const token = cookie
+        ?.split("; ")
+        .find((row) => row.startsWith("token="))
+        ?.split("=")[1];
 
     if (!token) throw redirect(302, "/");
+
+    // 서버로 요청을 보내서 토큰 검증
+    const response = await fetch("http://localhost:8080/checkToken", {
+        method: "GET",
+        headers: {
+            Authorization: `Bearer ${token}`,
+        },
+    });
+
+    if (response.status === 401) {
+        throw redirect(302, "/");
+    }
+
+    if (!response.ok) {
+        throw redirect(302, "/");
+    }
+
+    return {
+        token,
+    };
 };

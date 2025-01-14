@@ -15,12 +15,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "userId", unique = true)
-    private String userId;  // userId 개별 유니크 제약 조건
+    @Column(name = "username", unique = true)
+    private String username; // username 개별 유니크 제약 조건
 
     private String password;
-    private String username;
+    private String nickname;
 
     @Column(name = "email", unique = true)
-    private String email;  // email 개별 유니크 제약 조건
+    private String email; // email 개별 유니크 제약 조건
 }
